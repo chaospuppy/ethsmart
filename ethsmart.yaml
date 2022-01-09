@@ -1,0 +1,17 @@
+preferences:
+  unit: "gwei"
+chains:
+  ropsten:
+    accounts:
+      default:
+        addr: 0xcE16c04798c47f786CD79f4Ab2d3a783A08faa66
+        # private_key: path/to/key
+      secondary:
+        addr: 0x75f41F2C4bAE5c5B37B3E82B1864e4723a4511eD
+        # private_key: path/to/key
+  mainnet:
+    accounts:
+      default:
+        addr: 0xcE16c04798c47f786CD79f4Ab2d3a783A08faa66
+        # private_key: path/to/key
+
