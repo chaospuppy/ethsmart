@@ -1,10 +1,23 @@
 from modules import eth_math
 
 class EthereumTxn:
-    def __init__(self, amount=None, from_addr=None, to_addr=None):
-        self._amount = amount
-        self._from_addr = from_addr
-        self._to_addr = to_addr
+    def __init__(self, input):
+        self._amount = input.amount
+        self._from_addr = input.from_addr
+        self._to_addr = input.to_addr
+    @property
+    def gas_price(self):
+        return self._gas_price
+    @gas_price.setter
+    def gas_price(self, gas_price):
+        self._gas_price = gas_price
+    # make float
+    @property
+    def total_cost(self):
+        return self._amount
+    @total_cost.setter
+    def total_cost(self, total_cost):
+        self._total_cost = total_cost
     @property
     def amount(self):
         return self._amount
@@ -34,11 +47,7 @@ class EthereumTxn:
 def calculate_txn_fee(w3, txn, logger):
     gas_estimate = w3.eth.estimate_gas(txn.to_json())
     gas_base_fee = w3.eth.get_block('latest').baseFeePerGas
-    gas_fee = eth_math.convert("wei","gwei", gas_estimate * gas_base_fee)
-    total_txn_fee = gas_fee + eth_math.convert("gwei", "gwei", float(txn.amount))
-    txn_cost = {
-            "gas_fee": f"{gas_fee}",
-            "total_cost": f"{total_txn_fee}",
-        }
-    logger.info(f"{txn_cost}")
-
+    txn.gas_price = eth_math.convert("wei","gwei", gas_estimate * gas_base_fee)
+    txn.total_cost = txn.gas_price + eth_math.convert("gwei", "gwei", float(txn.amount))
+    logger.info(f"{txn.gas_price}")
+    return txn.total_cost

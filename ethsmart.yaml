@@ -2,6 +2,8 @@ preferences:
   unit: "gwei"
 chains:
   ropsten:
+    default: false
+    endpoint: "https://ropsten.infura.io/v3/6b0739e915a04d5bbdac6711c72f1052"
     accounts:
       default:
         addr: 0xcE16c04798c47f786CD79f4Ab2d3a783A08faa66
@@ -10,8 +12,15 @@ chains:
         addr: 0x75f41F2C4bAE5c5B37B3E82B1864e4723a4511eD
         # private_key: path/to/key
   mainnet:
+    endpoint: "https://mainnet.infura.io/v3/6b0739e915a04d5bbdac6711c72f1052"
     accounts:
       default:
         addr: 0xcE16c04798c47f786CD79f4Ab2d3a783A08faa66
         # private_key: path/to/key
-
+  rinkby:
+    default: true
+    endpoint: "https://rinkeby.infura.io/v3/6b0739e915a04d5bbdac6711c72f1052"
+    accounts:
+      default:
+        addr: 0xcE16c04798c47f786CD79f4Ab2d3a783A08faa66
+        # private_key: path/to/key
