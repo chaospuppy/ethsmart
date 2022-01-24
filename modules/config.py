@@ -10,23 +10,23 @@ class EthsmartConfig:
           config_data = self.parse_config(input.config)
 
           for chain in config_data["chains"].keys():
-              if "default" in config_data["chains"][chain]:
-                  if config_data["chains"][chain]["default"]:
-                      self._chain = chain
-                      break
-        # Allow user override of chain
-        if input.chain:
+            if "default" in config_data["chains"][chain]:
+              if config_data["chains"][chain]["default"]:
+                self._chain = chain
+                break
+          # Allow user override of chain
+          if input.chain:
             self._chain = input.chain
-
-        if not hasattr(self, "_chain"):
+          if not hasattr(self, "_chain"):
             logging.fatal("chain must be specified with --chain or in ethsmart.yaml")
             sys.exit(1)
-
-        self._endpoint = config_data["chains"][self._chain]["endpoint"]
-        self._unit = config_data["preferences"]["unit"]
-        # Allow user input of unit
+          self._endpoint = config_data["chains"][self._chain]["endpoint"]
+          self._unit = config_data["preferences"]["unit"]
+        # Allow user override of unit
         if input.unit:
-            self._unit = input.unit
+          self._unit = input.unit
+
+        # Allow user input of unit
     def parse_config(self, file):
         with open(file ,"r") as f:
             return yaml.safe_load(f)
