@@ -59,3 +59,6 @@ def calculate_txn_fee(w3, txn, logger):
     txn.total_cost = txn.gas_price + eth_math.convert("gwei", "gwei", float(txn.amount))
     logger.info(f"This transaction has a gas price of {txn.gas_price}, for a total cost of {float(txn.total_cost)}")
     return txn.total_cost
+
+def execute_txn(w3, txn, logger):
+    print()
