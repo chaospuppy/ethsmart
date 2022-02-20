@@ -24,11 +24,13 @@ def main(logger):
 
   parser.add_argument('cmd', choices=['calculate'])
   parser.add_argument('--amount', help="Amount (in gwei) to transfer")
-  parser.add_argument('--from_addr', help="Account to send funds from")
-  parser.add_argument('--to_addr', help="Account to receive funds")
+  parser.add_argument('--from-addr', help="Account to send funds from")
+  parser.add_argument('--to-addr', help="Account to receive funds")
   parser.add_argument('--chain', help="Determines the ethereum chain used for this action.  The chain must exist in ethsmart.yaml and have a defined endpoint")
   parser.add_argument('--unit', default='gwei', help="Units for transaction", choices=['wei', 'gwei', 'eth'])
   parser.add_argument('--config', default=pathlib.Path(os.getenv('HOME')).joinpath('.ethsmart/ethsmart.yaml'), help="Path to ethsmart config file to use")
+  parser.add_argument('--max-priority-fee', default=0, help='A priorty fee (miner tip) to include')
+  parser.add_argument('--max-fee', help='The maximum amount you\'re willing to pay for this transaction')
   args = parser.parse_args()
 
   ethsmart_config = config.EthsmartConfig(args)
@@ -42,8 +44,15 @@ def main(logger):
       if not all(getattr(args, arg) is not None for arg in required_args):
         logger.fatal(f"{required_args} are required arguments for {args.cmd}")
         sys.exit(1)
-      txn = transaction.EthereumTxn(amount=args.amount, from_addr=args.from_addr, to_addr=args.to_addr, unit=args.unit)
+      txn = transaction.EthereumTxn(amount=args.amount, from_addr=args.from_addr, to_addr=args.to_addr, unit=args.unit, priority_fee=args.priority_fee)
       transaction.calculate_txn_fee(w3, txn, logger)
+    case "send":
+      required_args = ["amount", "from_addr", "to_addr", "max_fee"]
+      if not all(getattr(args, arg) is not None for arg in required_args):
+        logger.fatal(f"{required_args} are required arguments for {args.cmd}")
+        sys.exit(1)
+      txn = transaction.EthereumTxn(amount=args.amount, from_addr=args.from_addr, to_addr=args.to_addr, unit=args.unit, priority_fee=args.priority_fee, max_fee=args.max_fee)
+      transaction.send(w3, txn, logger)
 
 if __name__ == '__main__':
   log_format = "%(levelname)s %(asctime)s - %(message)s"
